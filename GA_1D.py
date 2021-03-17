@@ -13,7 +13,7 @@ Initializes the chromosome using a uniform distribution between -5.0 and 5.0
 """
 def initialize():
     chromosome = []
-    for i in range(5):
+    for i in range(6):
         gene = random.uniform(-5.0, 5.0)
         chromosome.append(gene)
     return chromosome
@@ -48,16 +48,29 @@ def find_selector(sort):
         val = 2
     if (ind >= sort.get(2) and ind <= sort.get(3)):
         val = 3
-    if (ind >= sort.get(3)):
+    if (ind >= sort.get(3) and ind <= sort.get(4)):
         val = 4
+    if (ind >= sort.get(4)):
+        val = 5
     return val
+
 """
-Implements crossover using the 
-TODO Determine crossover operator
+Implements crossover using the random number in range crossover operator
+
+Returns: the offspring of the two parents
 """
 def crossover(parent_one, parent_two):
     offspring = []
-    crossover = 0#TODO <crossover code>
+    if random.random() <= 0.25:
+        print("CROSSOVER OCCURED!")
+        if parent_one > parent_two:
+            temp = parent_one
+            parent_one = parent_two
+            parent_two = temp
+        offspring.append(random.uniform(parent_one, parent_two))
+    else:
+        offspring.append(parent_one)
+        offspring.append(parent_two)
     return offspring
 
 """
