@@ -27,10 +27,9 @@ def fitness(chromosome):
     fit_score = []
     for gene in chromosome:
         fit = pow(gene, 4) - 22 * pow(gene, 2)
-        print(fit)
         fit_score.append(fit)
     fit_sum = sum(fit_score)
-    return {fit_score.index(element): element / fit_sum for element in fit_score}
+    return fit_score
     
 """
 Finds the index of the gene we want to select
@@ -40,7 +39,7 @@ Returns: an index for the selected gene
 def find_selector(sort):
     ind = random.uniform(0.0, 1.0)
     val = 0
-    if (ind >= sort.get(0)):
+    if (ind <= sort.get(0)):
         val = 0
     if (ind >= sort.get(0) and ind <= sort.get(1)): 
         val = 1
@@ -61,12 +60,13 @@ Returns: the offspring of the two parents
 """
 def crossover(parent_one, parent_two):
     offspring = []
-    if random.random() <= 0.25:
-        print("CROSSOVER OCCURED!")
+    if random.random() <= 0.5:
+        #print("CROSSOVER OCCURED!")
         if parent_one > parent_two:
             temp = parent_one
             parent_one = parent_two
             parent_two = temp
+        offspring.append(random.uniform(parent_one, parent_two))
         offspring.append(random.uniform(parent_one, parent_two))
     else:
         offspring.append(parent_one)
@@ -80,7 +80,7 @@ Returns: Either 0 (if no mutatation) or a random number between [-5.0, 5.0] (if 
 """
 def mutate(chromosome):
     if random.random() <= 0.01:
-        print("MUTATION OCCURED!")
+        #print("MUTATION OCCURED!")
         return random.uniform(-5.0, 5.0)
     else:
         return 0
@@ -90,9 +90,12 @@ Implements selection using the roulette wheel operator
 """
 def select(chromosome):
     selector = fitness(chromosome)
+    for element in selector:
+        selector[selector.index(element)] = element/sum(selector)
     # Sorts the dictionary to compare values
-    sort = dict(sorted(selector.items(), key = lambda item: item[1]))
+    sort = sorted(selector)
+    sort_dict = dict(zip(range(0,5),sort))
     selected = []
     for item in range(len(chromosome)):
-        selected.append(chromosome[find_selector(sort)])
+        selected.append(chromosome[find_selector(sort_dict)])
     return selected

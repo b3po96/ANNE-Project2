@@ -19,7 +19,7 @@ import random
 import matplotlib.pyplot as plt
 
 
-def hill_climb(node):
+def hill_climb_2D(node):
     grad = 0
     for i in range(1000):
         if node <= -5:
